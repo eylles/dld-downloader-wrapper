@@ -5,14 +5,22 @@ myname="${0##*/}"
 DryRun=""
 Debug=""
 
-help () {
+show_usage () {
+    printf '%s:\n' "Usage"
+    printf '\t%s\n' "${myname}: -f <links file> | <links>"
+    if [ -n "$1" ]; then
+        exit "$1"
+    fi
+
+}
+
+show_help () {
     code=0
     if [ -n "$1" ]; then
         code="$1"
     fi
     printf '%s: %s\n' "$myname" "downloader utility"
-    printf '%s:\n' "Usage"
-    printf '\t%s\n' "${myname}: -f <links file> | <links>"
+    show_usage
     printf '\t%s\n' "Use single quotes to quote the links to protect from shell"
     printf '\t%s\n' "expansion of characters."
     printf '\t%s\t%s\n' "-f" "read links from file."
@@ -113,14 +121,15 @@ while getopts "hndf:" o; do case "${o}" in
     n) DryRun=1 ;;
     d) Debug=1 ;;
     f) file="$OPTARG" ;;
-    *) help ;;
+    h) show_help 0 ;;
+    *) show_usage 1 ;;
 esac done
 shift $(( OPTIND - 1 ))
 
 [ -n "$Debug" ] && printf '%s\n' "arguments: ${#}"
 
 if [ "${#}" -eq 0 ] && [ -z "$file" ]; then
-    help 1
+    show_usage 1
 else
     if [ -n "$file" ]; then
         file_handler "$file"
