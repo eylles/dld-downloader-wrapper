@@ -12,9 +12,10 @@ help () {
     fi
     printf '%s: %s\n' "$myname" "downloader utility"
     printf '%s:\n' "Usage"
-    printf '\t%s\n' "${myname}: <links>"
+    printf '\t%s\n' "${myname}: -f <links file> | <links>"
     printf '\t%s\n' "Use single quotes to quote the links to protect from shell"
     printf '\t%s\n' "expansion of characters."
+    printf '\t%s\t%s\n' "-f" "read links from file."
     printf '\t-n\tdry run.\n\t-d\tdebug messages.\n\t-h\tshow this help.\n'
     exit "$code"
 }
@@ -60,19 +61,7 @@ handler_aria () {
     printf '\n'
 }
 
-OPTIND=1
-while getopts "hnd" o; do case "${o}" in
-    n) DryRun=1 ;;
-    d) Debug=1 ;;
-    *) help ;;
-esac done
-shift $(( OPTIND - 1 ))
-
-[ -n "$Debug" ] && printf '%s\n' "arguments: ${#}"
-
-if [ "${#}" -eq 0 ]; then
-    help 1
-else
+link_dispatcher () {
     for link in "$@"; do
         safeprot=""
         case "${link}" in
@@ -98,4 +87,44 @@ else
             printf '%s: %s\n' "Ignoring potentially unsafe url" "$link"
         fi
     done
+}
+
+# Usage: read_file file
+#
+# Return: string 'line'
+read_file() {
+  while read -r FileLine
+  do
+    printf '%s\n' "$FileLine"
+  done < "$1"
+}
+
+file_handler () {
+  if [ -f "$1" ]; then
+      link_dispatcher $(read_file "$1")
+  else
+    printf '%s: %s\n' "$myname" "argument ${1} is not a valid file!"
+    exit 1
+  fi
+}
+
+OPTIND=1
+while getopts "hndf:" o; do case "${o}" in
+    n) DryRun=1 ;;
+    d) Debug=1 ;;
+    f) file="$OPTARG" ;;
+    *) help ;;
+esac done
+shift $(( OPTIND - 1 ))
+
+[ -n "$Debug" ] && printf '%s\n' "arguments: ${#}"
+
+if [ "${#}" -eq 0 ] && [ -z "$file" ]; then
+    help 1
+else
+    if [ -n "$file" ]; then
+        file_handler "$file"
+    else
+        link_dispatcher "$@"
+    fi
 fi
