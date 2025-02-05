@@ -1,5 +1,12 @@
 #!/bin/sh
 
+#######################################################################
+#### A downloader utility wrapper around curl, aria2 and megatools ####
+#### it can take links from a file and does a check to only allow  ####
+#### http and ftp links to be passed onto the actual downloader    ####
+#### programs.                                                     ####
+#######################################################################
+
 myname="${0##*/}"
 
 DryRun=""
@@ -14,12 +21,18 @@ show_usage () {
 
 }
 
+# return type: string
+get_header_comment () {
+    sed -n '/^#### /p' "$0" | sed 's/^#### /\t/ ; s/ ####$//'
+}
+
 show_help () {
     code=0
     if [ -n "$1" ]; then
         code="$1"
     fi
-    printf '%s: %s\n' "$myname" "downloader utility"
+    printf '%s:\n' "$myname"
+    get_header_comment
     show_usage
     printf '\t%s\n' "Use single quotes to quote the links to protect from shell"
     printf '\t%s\n' "expansion of characters."
