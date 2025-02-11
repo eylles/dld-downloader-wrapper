@@ -53,9 +53,9 @@ handler_megatools () {
             fi
         fi
         if [ -n "$mtw_valid" ]; then
-                mtw dl "$1"
+            mtw dl "$1"
         else
-                megatools dl "$1"
+            megatools dl "$1"
         fi
         printf '\n'
     else
@@ -98,7 +98,7 @@ link_dispatcher () {
                 *.jpg*)    handler="curl"      ;;
                 *)         handler="aria"      ;;
             esac
-            printf '%12s: %s\n' "$handler" "$link"
+            printf '%12s: %s\n\n' "$handler" "$link"
             case "$handler" in
                 megatools) handler_megatools "$link" ;;
                 curl)      handler_curl      "$link" ;;
@@ -114,19 +114,19 @@ link_dispatcher () {
 #
 # Return: string 'line'
 read_file() {
-  while read -r FileLine
-  do
-    printf '%s\n' "$FileLine"
-  done < "$1"
+    while read -r FileLine
+    do
+        printf '%s\n' "$FileLine"
+    done < "$1"
 }
 
 file_handler () {
-  if [ -f "$1" ]; then
-      link_dispatcher $(read_file "$1")
-  else
-    printf '%s: %s\n' "$myname" "argument ${1} is not a valid file!"
-    exit 1
-  fi
+    if [ -f "$1" ]; then
+        link_dispatcher $(read_file "$1")
+    else
+        printf '%s: %s\n' "$myname" "argument ${1} is not a valid file!"
+        exit 1
+    fi
 }
 
 OPTIND=1
