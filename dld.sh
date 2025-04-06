@@ -63,6 +63,16 @@ handler_megatools () {
     fi
 }
 
+handler_wget () {
+    if [ -z "$DryRun" ]; then
+        wget -c --content-disposition "$1"
+    else
+        printf '%s: %s\n' "download link" "$1"
+    fi
+    printf '\n'
+
+}
+
 handler_curl () {
     if [ -z "$DryRun" ]; then
         curl -O -C - "$1"
