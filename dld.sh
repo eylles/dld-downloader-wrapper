@@ -41,6 +41,12 @@ show_help () {
     exit "$code"
 }
 
+# usage: check_cmd command
+#     returns the command if it exists
+check_cmd(){
+    [ "$(command -v "$1" 2>/dev/null)" ] && printf '%s\n' "$1"
+}
+
 handler_megatools () {
     if [ -z "$DryRun" ]; then
         # do we have the megatools wrapper?
