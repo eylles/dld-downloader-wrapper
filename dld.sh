@@ -122,13 +122,13 @@ link_dispatcher () {
             handler=""
             case "${link}" in
                 *mega.nz*) handler="megatools" ;;
-                *.jpg*)    handler="curl"      ;;
+                *.jpg*)    handler="cnw"       ;;
                 *)         handler="aria"      ;;
             esac
             printf '%12s: %s\n\n' "$handler" "$link"
             case "$handler" in
                 megatools) handler_megatools "$link" ;;
-                curl)      handler_curl      "$link" ;;
+                cnw)       handler_cnw       "$link" ;;
                 aria)      handler_aria      "$link" ;;
             esac
         else
