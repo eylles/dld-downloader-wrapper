@@ -88,6 +88,17 @@ handler_curl () {
     printf '\n'
 }
 
+# wrap curl and wget handlers, prefer curl
+handler_cnw () {
+    [ -z "$cnw_cmd" ] && cnw_cmd=$(check_cmd "curl")
+    [ -z "$cnw_cmd" ] && cnw_cmd=$(check_cmd "wget")
+
+    case "$cnw_cmd" in
+        "curl") handler_curl "$1" ;;
+        "wget") handler_wget "$1" ;;
+    esac
+}
+
 handler_aria () {
     if [ -z "$DryRun" ]; then
         aria2c -c --file-allocation=falloc -x 8 -s 8 \
