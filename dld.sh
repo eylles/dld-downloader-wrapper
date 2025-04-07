@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #######################################################################
-#### A downloader utility wrapper around curl, aria2 and megatools ####
-#### it can take links from a file and does a check to only allow  ####
-#### http and ftp links to be passed onto the actual downloader    ####
-#### programs.                                                     ####
+#### A downloader utility wrapper around curl, wget, aria2 and     ####
+#### megatools it can take links from a file and does a check to   ####
+#### only allow http and ftp links to be passed onto the actual    ####
+#### downloader programs.                                          ####
 #######################################################################
 
 myname="${0##*/}"
