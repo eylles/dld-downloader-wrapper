@@ -10,7 +10,6 @@ install: $(NAME)
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	chmod 755 $(NAME)
 	cp -vf $(NAME) ${DESTDIR}${PREFIX}/bin/$(NAME)
-	rm -f $(NAME)
 uninstall:
 	rm -vf ${DESTDIR}${PREFIX}/bin/$(NAME)
 clean:
