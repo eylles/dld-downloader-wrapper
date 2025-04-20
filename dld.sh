@@ -62,6 +62,7 @@ check_cmd(){
 }
 
 handler_megatools () {
+    handler_header "megatools" "$1"
     if [ -z "$DryRun" ]; then
         # do we have the megatools wrapper?
         MegatoolsWrpPath=$(command -v mtw)
@@ -84,6 +85,7 @@ handler_megatools () {
 }
 
 handler_wget () {
+    handler_header "wget" "$1"
     if [ -z "$DryRun" ]; then
         wget -c --content-disposition "$1"
     else
@@ -94,6 +96,7 @@ handler_wget () {
 }
 
 handler_curl () {
+    handler_header "curl" "$1"
     if [ -z "$DryRun" ]; then
         curl -O -C - "$1"
     else
@@ -114,6 +117,7 @@ handler_cnw () {
 }
 
 handler_aria () {
+    handler_header "aria" "$1"
     if [ -z "$DryRun" ]; then
         aria2c -c --file-allocation=falloc -x 8 -s 8 \
             --content-disposition-default-utf8 "$1"
@@ -139,7 +143,6 @@ link_dispatcher () {
                 *.jpg*)    handler="cnw"       ;;
                 *)         handler="aria"      ;;
             esac
-            printf '%12s: %s\n\n' "$handler" "$link"
             case "$handler" in
                 megatools) handler_megatools "$link" ;;
                 cnw)       handler_cnw       "$link" ;;
