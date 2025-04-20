@@ -12,6 +12,20 @@ myname="${0##*/}"
 DryRun=""
 Debug=""
 
+sep_char="#"
+cols=$(tput cols)
+count=8
+while [ "$count" -lt "$cols" ]; do
+    dld_separator="${dld_separator}${sep_char}"
+    count=$(( count + 1 ))
+done
+
+# usage: handler_header "handler name" "link"
+handler_header () {
+    printf '    %s\n' "$dld_separator"
+    printf '%12s: %s\n\n' "$1" "$2"
+}
+
 show_usage () {
     printf '%s:\n' "Usage"
     printf '\t%s\n' "${myname}: -f <links file> | <links>"
