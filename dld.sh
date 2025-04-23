@@ -190,7 +190,8 @@ if [ "${#}" -eq 0 ] && [ -z "$file" ]; then
 else
     if [ -n "$file" ]; then
         file_handler "$file"
-    else
+    fi
+    if [ "${#}" -gt 0 ]; then
         link_dispatcher "$@"
     fi
 fi
