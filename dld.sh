@@ -28,7 +28,7 @@ handler_header () {
 
 show_usage () {
     printf '%s:\n' "Usage"
-    printf '\t%s\n' "${myname}: -f <links file> | <links>"
+    printf '\t%s\n' "${myname}: [-hnd] [-f <links file>] <links>"
     if [ -n "$1" ]; then
         exit "$1"
     fi
