@@ -139,9 +139,9 @@ link_dispatcher () {
         if [ "$safeprot" -eq 1 ]; then
             handler=""
             case "${link}" in
-                *mega.nz*) handler="megatools" ;;
-                *.jpg*)    handler="cnw"       ;;
-                *)         handler="aria"      ;;
+                *mega.nz*)      handler="megatools" ;;
+                *.jpg*|*.jpeg*) handler="cnw"       ;;
+                *)              handler="aria"      ;;
             esac
             case "$handler" in
                 megatools) handler_megatools "$link" ;;
