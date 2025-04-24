@@ -127,6 +127,8 @@ handler_aria () {
     printf '\n'
 }
 
+# Usage: link_dispatcher LINKS
+#   LINKS: space separated list of links to handle
 link_dispatcher () {
     for link in "$@"; do
         safeprot=""
@@ -166,6 +168,8 @@ read_file() {
 
 file_handler () {
     if [ -f "$1" ]; then
+        # we want word splitting
+        # shellcheck disable=SC2046
         link_dispatcher $(read_file "$1")
     else
         printf '%s: %s\n' "$myname" "argument ${1} is not a valid file!"
