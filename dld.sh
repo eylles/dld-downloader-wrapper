@@ -64,20 +64,17 @@ check_cmd(){
 handler_megatools () {
     handler_header "megatools" "$1"
     if [ -z "$DryRun" ]; then
+        megacmd="megatools"
         # do we have the megatools wrapper?
         MegatoolsWrpPath=$(command -v mtw)
         [ -n "$MegatoolsWrpPath" ] && mtw_avail=1
         if [ -n "$mtw_avail" ]; then
             # is it actually a megatools wrapper
             if mtw | grep -q "megatools"; then
-                mtw_valid=1
+                megacmd="mtw"
             fi
         fi
-        if [ -n "$mtw_valid" ]; then
-            mtw dl "$1"
-        else
-            megatools dl "$1"
-        fi
+        $megacmd dl "$1"
         printf '\n'
     else
         printf '%s: %s\n' "download link" "$1"
