@@ -7,6 +7,27 @@
 #### downloader programs.                                          ####
 #######################################################################
 
+dwld_retries=5
+
+config_dir="${XDG_CONFIG_HOME:-${HOME}/.config}/dld"
+config_file="${config_dir}/configrc"
+
+# loading the config here means the user can overwrite any of the functions
+if [ -f "$config_file" ]; then
+    . "$config_file"
+else
+    if [ ! -d "$config_dir" ]; then
+        mkdir -p "$config_dir"
+    fi
+        cat << __HEREDOC__ > "$config_file"
+# vim: ft=sh
+# dld download wrapper config file
+
+# number of tries for downloaders
+dwld_retries="${dwld_retries}"
+__HEREDOC__
+fi
+
 myname="${0##*/}"
 
 DryRun=""
@@ -84,7 +105,7 @@ handler_megatools () {
 handler_wget () {
     handler_header "wget" "$1"
     if [ -z "$DryRun" ]; then
-        wget -c --content-disposition "$1"
+        wget -c --content-disposition --tries="$dwld_retries" "$1"
     else
         printf '%s: %s\n' "download link" "$1"
     fi
@@ -95,7 +116,7 @@ handler_wget () {
 handler_curl () {
     handler_header "curl" "$1"
     if [ -z "$DryRun" ]; then
-        curl -O -C - "$1"
+        curl --retry "$dwld_retries" -O -C - "$1"
     else
         printf '%s: %s\n' "download link" "$1"
     fi
@@ -117,7 +138,7 @@ handler_aria () {
     handler_header "aria" "$1"
     if [ -z "$DryRun" ]; then
         aria2c -c --file-allocation=falloc -x 8 -s 8 \
-            --content-disposition-default-utf8 "$1"
+            --content-disposition-default-utf8 -m "$dwld_retries" "$1"
     else
         printf '%s: %s\n' "download link" "$1"
     fi
