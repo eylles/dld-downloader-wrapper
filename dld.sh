@@ -24,7 +24,7 @@ else
 # dld download wrapper config file
 
 # number of tries for downloaders
-dwld_retries="${dwld_retries}"
+dwld_retries=${dwld_retries}
 __HEREDOC__
 fi
 
@@ -73,6 +73,8 @@ show_help () {
     printf '\t%s\n' "expansion of characters."
     printf '\t%s\t%s\n' "-f" "read links from file."
     printf '\t-n\tdry run.\n\t-d\tdebug messages.\n\t-h\tshow this help.\n'
+    printf '%s:\n' "Config"
+    printf '\t%s\n' "The config file is located at ${config_file}"
     exit "$code"
 }
 
@@ -80,6 +82,21 @@ show_help () {
 #     returns the command if it exists
 check_cmd(){
     [ "$(command -v "$1" 2>/dev/null)" ] && printf '%s\n' "$1"
+}
+
+retry_cmd() {
+    retries="$dwld_retries"
+    r_delay=2
+    rc=0
+    until "$@"; do
+        rc=$(( rc + 1 ))
+        if [ "$rc" -ge "$retries" ]; then
+            printf "Failed after %d attempts: %s\n" "$retries" "$*"
+            return 1
+        fi
+        printf "Retrying (%d/%d)...\n" "$count" "$retries"
+        sleep "$r_delay"
+    done
 }
 
 handler_megatools () {
@@ -95,7 +112,7 @@ handler_megatools () {
                 megacmd="mtw"
             fi
         fi
-        $megacmd dl "$1"
+        retry_cmd $megacmd dl "$1"
         printf '\n'
     else
         printf '%s: %s\n' "download link" "$1"
