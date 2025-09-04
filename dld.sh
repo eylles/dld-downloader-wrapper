@@ -84,7 +84,11 @@ show_help () {
 # usage: check_cmd command
 #     returns the command if it exists
 check_cmd(){
-    [ "$(command -v "$1" 2>/dev/null)" ] && printf '%s\n' "$1"
+    if [ "$(command -v "$1" 2>/dev/null)" ]; then
+        printf '%s\n' "$1"
+    else
+        return $return_error
+    fi
 }
 
 retry_cmd() {
@@ -107,9 +111,7 @@ handler_megatools () {
     if [ -z "$DryRun" ]; then
         megacmd="megatools"
         # do we have the megatools wrapper?
-        MegatoolsWrpPath=$(command -v mtw)
-        [ -n "$MegatoolsWrpPath" ] && mtw_avail=1
-        if [ -n "$mtw_avail" ]; then
+        if check_cmd mtw >/dev/null ; then
             # is it actually a megatools wrapper
             if mtw | grep -q "megatools"; then
                 megacmd="mtw"
