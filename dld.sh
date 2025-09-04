@@ -33,6 +33,9 @@ myname="${0##*/}"
 DryRun=""
 Debug=""
 
+return_normal=0
+return_error=1
+
 sep_char="#"
 cols=$(tput cols)
 count=8
@@ -208,7 +211,7 @@ file_handler () {
         link_dispatcher $(read_file "$1")
     else
         printf '%s: %s\n' "$myname" "argument ${1} is not a valid file!"
-        exit 1
+        exit "$return_error"
     fi
 }
 
@@ -217,15 +220,15 @@ while getopts "hndf:" o; do case "${o}" in
     n) DryRun=1 ;;
     d) Debug=1 ;;
     f) file="$OPTARG" ;;
-    h) show_help 0 ;;
-    *) show_usage 1 ;;
+    h) show_help "$return_normal" ;;
+    *) show_usage "$return_error" ;;
 esac done
 shift $(( OPTIND - 1 ))
 
 [ -n "$Debug" ] && printf '%s\n' "arguments: ${#}"
 
 if [ "${#}" -eq 0 ] && [ -z "$file" ]; then
-    show_usage 1
+    show_usage "$return_error"
 else
     if [ -n "$file" ]; then
         file_handler "$file"
