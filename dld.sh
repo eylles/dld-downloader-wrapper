@@ -36,6 +36,7 @@ Debug=""
 return_normal=0
 return_error=1
 
+dld_separator=""
 sep_char="#"
 cols=$(tput cols)
 count=8
@@ -101,7 +102,7 @@ retry_cmd() {
             printf "Failed after %d attempts: %s\n" "$retries" "$*"
             return 1
         fi
-        printf "Retrying (%d/%d)...\n" "$count" "$retries"
+        printf "Retrying (%d/%d)...\n" "$rc" "$retries"
         sleep "$r_delay"
     done
 }
@@ -227,9 +228,9 @@ while getopts "hndf:" o; do case "${o}" in
 esac done
 shift $(( OPTIND - 1 ))
 
-[ -n "$Debug" ] && printf '%s\n' "arguments: ${#}"
+[ -n "$Debug" ] && printf '%s\n' "arguments: $#"
 
-if [ "${#}" -eq 0 ] && [ -z "$file" ]; then
+if [ "$#" -eq 0 ] && [ -z "$file" ]; then
     show_usage "$return_error"
 else
     if [ -n "$file" ]; then
