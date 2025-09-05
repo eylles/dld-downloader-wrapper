@@ -111,14 +111,11 @@ handler_megatools () {
     handler_header "megatools" "$1"
     if [ -z "$DryRun" ]; then
         megacmd="megatools"
-        # do we have the megatools wrapper?
-        if check_cmd mtw >/dev/null ; then
-            # is it actually a megatools wrapper
-            if mtw | grep -q "megatools"; then
-                megacmd="mtw"
-            fi
+        # do we have the megatools wrapper and is it actually a megatools wrapper
+        if check_cmd mtw >/dev/null && mtw | grep -q "megatools"; then
+            megacmd="mtw"
         fi
-        retry_cmd $megacmd dl "$1"
+        retry_cmd "$megacmd" dl "$1"
         printf '\n'
     else
         printf '%s: %s\n' "download link" "$1"
