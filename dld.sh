@@ -79,6 +79,8 @@ show_help () {
     printf '\t-n\tdry run.\n\t-d\tdebug messages.\n\t-h\tshow this help.\n'
     printf '%s:\n' "Config"
     printf '\t%s\n' "The config file is located at ${config_file}"
+    printf '\t%s\n' "you can use it to configurate the amount of retries"
+    printf '\t%s\n' "used by all downloader commands."
     exit "$code"
 }
 
