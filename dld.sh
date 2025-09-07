@@ -181,14 +181,20 @@ link_dispatcher () {
         if [ "$safeprot" -eq 1 ]; then
             handler=""
             case "${link}" in
-                *mega.nz*)      handler="megatools" ;;
-                *.jpg*|*.jpeg*) handler="cnw"       ;;
-                *)              handler="aria"      ;;
+                *mega.nz*)
+                    handler="megatools" ;;
+                *.jpg*|*.jpeg*)
+                    handler="cnw"       ;;
+                *.iso*)
+                    handler="wget"      ;;
+                *)
+                    handler="aria"      ;;
             esac
             case "$handler" in
                 megatools) handler_megatools "$link" ;;
                 cnw)       handler_cnw       "$link" ;;
                 aria)      handler_aria      "$link" ;;
+                wget)      handler_wget      "$link" ;;
             esac
         else
             printf '%s: %s\n' "Ignoring potentially unsafe url" "$link"
