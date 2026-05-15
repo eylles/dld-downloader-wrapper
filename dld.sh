@@ -183,10 +183,8 @@ link_dispatcher () {
             case "${link}" in
                 *mega.nz*)
                     handler="megatools" ;;
-                *.jpg*|*.jpeg*)
+                *.jpg*|*.jpeg*|*.iso*)
                     handler="cnw"       ;;
-                *.iso*)
-                    handler="wget"      ;;
                 *)
                     handler="aria"      ;;
             esac
