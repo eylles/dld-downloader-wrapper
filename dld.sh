@@ -236,6 +236,16 @@ _true=0
 # value: 1
 _false=1
 
+is_text_file () {
+    r_path="$(realpath "$1")"
+    [ ! -f "$r_path" ] && return "$_false"
+    [ ! -r "$r_path" ] && return "$_false"
+    case "$(file -b --mime-type "$r_path")" in
+        text/*) return "$_true" ;;
+        *)      return "$_false"
+    esac
+}
+
 file_handler () {
     if [ -f "$1" ]; then
         # we want word splitting
