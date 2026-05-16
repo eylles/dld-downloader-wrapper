@@ -227,6 +227,15 @@ read_file() {
     done < "$1"
 }
 
+# unix command line compatible booleans
+
+# Type: int
+# value: 0
+_true=0
+# Type: int
+# value: 1
+_false=1
+
 file_handler () {
     if [ -f "$1" ]; then
         # we want word splitting
