@@ -50,8 +50,17 @@ myname="${0##*/}"
 DryRun=""
 Debug=""
 
-return_normal=0
-return_error=1
+# unix command line compatible booleans
+
+# Type: int
+# value: 0
+_true=0
+# Type: int
+# value: 1
+_false=1
+
+return_normal=$_true
+return_error=$_false
 
 dld_separator=""
 sep_char="#"
@@ -119,7 +128,7 @@ retry_cmd() {
         rc=$(( rc + 1 ))
         if [ "$rc" -ge "$retries" ]; then
             printf "Failed after %d attempts: %s\n" "$retries" "$*"
-            return 1
+            return $return_error
         fi
         printf "Retrying (%d/%d)...\n" "$rc" "$retries"
         sleep "$r_delay"
@@ -226,15 +235,6 @@ read_file() {
         printf '%s\n' "$FileLine"
     done < "$1"
 }
-
-# unix command line compatible booleans
-
-# Type: int
-# value: 0
-_true=0
-# Type: int
-# value: 1
-_false=1
 
 is_text_file () {
     r_path="$(realpath "$1")"
