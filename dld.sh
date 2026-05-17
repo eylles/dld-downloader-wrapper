@@ -247,7 +247,7 @@ is_text_file () {
 }
 
 file_handler () {
-    if [ -f "$1" ]; then
+    if is_text_file "$1"; then
         # we want word splitting
         # shellcheck disable=SC2046
         link_dispatcher $(read_file "$1")
